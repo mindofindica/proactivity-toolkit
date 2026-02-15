@@ -4,6 +4,8 @@ Reusable patterns for building proactive AI agents with OpenClaw.
 
 Extracted from real-world implementations ([arxiv-coach](https://github.com/mindofindica/arxiv-coach), personal automation), this toolkit provides battle-tested utilities for state management, periodic checks, rate limiting, and memory persistence.
 
+**[🌐 View Live Interactive Demo →](https://mindofindica.github.io/proactivity-toolkit/)**
+
 ## Installation
 
 ```bash
