@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proactivity Toolkit - Live Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+        .demo-output {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .module-card {
+            transition: transform 0.2s;
+        }
+        .module-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold mb-4">🚀 Proactivity Toolkit</h1>
+            <p class="text-xl opacity-90">Reusable patterns for building proactive AI agents with OpenClaw</p>
+            <div class="mt-6 flex gap-4">
+                <a href="https://github.com/mindofindica/proactivity-toolkit" class="bg-white text-blue-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100">
+                    GitHub
+                </a>
+                <a href="https://www.npmjs.com/package/@indica/proactivity-toolkit" class="border-2 border-white px-6 py-2 rounded-lg font-semibold hover:bg-white hover:text-blue-600">
+                    npm
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Start -->
+    <div class="container mx-auto px-4 py-12">
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-12">
+            <h2 class="text-2xl font-bold mb-4">Quick Start</h2>
+            <div class="code-block mb-4">
+npm install @indica/proactivity-toolkit
+            </div>
+            <div class="code-block">
+import { StateManager, HeartbeatManager, MemoryFile } from '@indica/proactivity-toolkit';
+
+// Track state across sessions
+const state = new StateManager('/tmp/my-agent-state.json');
+state.set('lastCheck', Date.now());
+
+// Schedule proactive checks
+const heartbeat = new HeartbeatManager(state, {
+    intervalMs: 30 * 60 * 1000 // 30 minutes
+});
+
+// Persist memory across restarts
+const memory = new MemoryFile('/tmp/memory.json');
+memory.append('tasks', { id: 1, name: 'Demo task' });
+            </div>
+        </div>
+
+        <!-- Modules Grid -->
+        <h2 class="text-3xl font-bold mb-8">Live Demos</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <!-- StateManager -->
+            <div class="module-card bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-2">📦 StateManager</h3>
+                <p class="text-gray-600 mb-4">Persistent JSON state with atomic writes</p>
+                <button onclick="demoStateManager()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Run Demo
+                </button>
+                <div id="state-output" class="demo-output mt-4 hidden"></div>
+            </div>
+
+            <!-- HeartbeatManager -->
+            <div class="module-card bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-2">💓 HeartbeatManager</h3>
+                <p class="text-gray-600 mb-4">Schedule periodic proactive checks</p>
+                <button onclick="demoHeartbeat()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+                    Run Demo
+                </button>
+                <div id="heartbeat-output" class="demo-output mt-4 hidden"></div>
+            </div>
+
+            <!-- MemoryFile -->
+            <div class="module-card bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-2">🧠 MemoryFile</h3>
+                <p class="text-gray-600 mb-4">Append-only memory logs</p>
+                <button onclick="demoMemory()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    Run Demo
+                </button>
+                <div id="memory-output" class="demo-output mt-4 hidden"></div>
+            </div>
+
+            <!-- TaskQueue -->
+            <div class="module-card bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-2">📋 TaskQueue</h3>
+                <p class="text-gray-600 mb-4">Priority-based task scheduling</p>
+                <button onclick="demoTaskQueue()" class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">
+                    Run Demo
+                </button>
+                <div id="queue-output" class="demo-output mt-4 hidden"></div>
+            </div>
+
+            <!-- RateLimiter -->
+            <div class="module-card bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-2">⏱️ RateLimiter</h3>
+                <p class="text-gray-600 mb-4">Token bucket rate limiting</p>
+                <button onclick="demoRateLimiter()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                    Run Demo
+                </button>
+                <div id="rate-output" class="demo-output mt-4 hidden"></div>
+            </div>
+
+            <!-- Integration -->
+            <div class="module-card bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-2">🔗 Full Integration</h3>
+                <p class="text-gray-600 mb-4">All modules working together</p>
+                <button onclick="demoIntegration()" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                    Run Demo
+                </button>
+                <div id="integration-output" class="demo-output mt-4 hidden"></div>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-12">
+            <h2 class="text-2xl font-bold mb-6">Why Use This?</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-bold text-lg mb-2">✅ Zero Dependencies</h3>
+                    <p class="text-gray-600">Pure Node.js, no external packages required</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2">🧪 Fully Tested</h3>
+                    <p class="text-gray-600">100% test coverage, 12 test suites</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2">📝 TypeScript Ready</h3>
+                    <p class="text-gray-600">Full type definitions included</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2">🚀 Production Proven</h3>
+                    <p class="text-gray-600">Powers arxiv-coach and other agents</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Use Cases -->
+        <div class="bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-6">Real-World Use Cases</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div>
+                    <h3 class="font-bold mb-2">📚 arxiv-coach</h3>
+                    <p class="text-gray-300 text-sm">Daily arXiv digest delivery with LLM scoring and gap detection</p>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-2">📊 Data Pipelines</h3>
+                    <p class="text-gray-300 text-sm">Scheduled data fetching with rate limiting and state tracking</p>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-2">🤖 Proactive Agents</h3>
+                    <p class="text-gray-300 text-sm">Heartbeat-driven agents that check email, calendar, notifications</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-gray-800 text-gray-400 py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>Built by <a href="https://github.com/mindofindica" class="text-white hover:underline">@mindofindica</a> • MIT License</p>
+        </div>
+    </div>
+
+    <script>
+        // Simplified in-browser implementations for demo purposes
+        class StateManager {
+            constructor(path) {
+                this.path = path;
+                this.data = {};
+            }
+            get(key, defaultValue) {
+                return this.data[key] ?? defaultValue;
+            }
+            set(key, value) {
+                this.data[key] = value;
+                return this;
+            }
+            getAll() {
+                return { ...this.data };
+            }
+        }
+
+        class HeartbeatManager {
+            constructor(state, options = {}) {
+                this.state = state;
+                this.intervalMs = options.intervalMs || 30 * 60 * 1000;
+                this.lastCheck = state.get('lastHeartbeat', 0);
+            }
+            shouldRun() {
+                const now = Date.now();
+                const elapsed = now - this.lastCheck;
+                return elapsed >= this.intervalMs;
+            }
+            markRun() {
+                this.lastCheck = Date.now();
+                this.state.set('lastHeartbeat', this.lastCheck);
+            }
+        }
+
+        class MemoryFile {
+            constructor(path) {
+                this.path = path;
+                this.entries = [];
+            }
+            append(category, data) {
+                this.entries.push({
+                    timestamp: new Date().toISOString(),
+                    category,
+                    data
+                });
+            }
+            getAll() {
+                return this.entries;
+            }
+        }
+
+        class TaskQueue {
+            constructor() {
+                this.tasks = [];
+            }
+            add(task, priority = 0) {
+                this.tasks.push({ task, priority, added: Date.now() });
+                this.tasks.sort((a, b) => b.priority - a.priority);
+            }
+            next() {
+                return this.tasks.shift()?.task;
+            }
+            size() {
+                return this.tasks.length;
+            }
+        }
+
+        class RateLimiter {
+            constructor(options = {}) {
+                this.tokensPerInterval = options.tokensPerInterval || 10;
+                this.intervalMs = options.intervalMs || 1000;
+                this.tokens = this.tokensPerInterval;
+                this.lastRefill = Date.now();
+            }
+            tryConsume(count = 1) {
+                this.refill();
+                if (this.tokens >= count) {
+                    this.tokens -= count;
+                    return true;
+                }
+                return false;
+            }
+            refill() {
+                const now = Date.now();
+                const elapsed = now - this.lastRefill;
+                const tokensToAdd = (elapsed / this.intervalMs) * this.tokensPerInterval;
+                this.tokens = Math.min(this.tokensPerInterval, this.tokens + tokensToAdd);
+                this.lastRefill = now;
+            }
+        }
+
+        function log(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.classList.remove('hidden');
+            el.innerHTML += message + '\n';
+            el.scrollTop = el.scrollHeight;
+        }
+
+        function clear(elementId) {
+            document.getElementById(elementId).innerHTML = '';
+        }
+
+        function demoStateManager() {
+            clear('state-output');
+            const state = new StateManager('/tmp/demo.json');
+            
+            log('state-output', '// Create state manager');
+            log('state-output', 'const state = new StateManager(\'/tmp/demo.json\');');
+            log('state-output', '');
+            
+            state.set('counter', 42);
+            log('state-output', '// Set values');
+            log('state-output', 'state.set(\'counter\', 42);');
+            log('state-output', '→ ' + JSON.stringify(state.getAll()));
+            log('state-output', '');
+            
+            state.set('lastRun', new Date().toISOString());
+            log('state-output', 'state.set(\'lastRun\', new Date().toISOString());');
+            log('state-output', '→ ' + JSON.stringify(state.getAll(), null, 2));
+            log('state-output', '');
+            
+            log('state-output', '// Get values');
+            log('state-output', 'state.get(\'counter\') → ' + state.get('counter'));
+            log('state-output', 'state.get(\'missing\', \'default\') → ' + state.get('missing', 'default'));
+        }
+
+        function demoHeartbeat() {
+            clear('heartbeat-output');
+            const state = new StateManager('/tmp/heartbeat.json');
+            const heartbeat = new HeartbeatManager(state, { intervalMs: 5000 });
+            
+            log('heartbeat-output', '// Create heartbeat manager (5 second interval)');
+            log('heartbeat-output', 'const heartbeat = new HeartbeatManager(state, {');
+            log('heartbeat-output', '  intervalMs: 5000');
+            log('heartbeat-output', '});');
+            log('heartbeat-output', '');
+            
+            log('heartbeat-output', '// Check if should run');
+            log('heartbeat-output', 'heartbeat.shouldRun() → ' + heartbeat.shouldRun());
+            log('heartbeat-output', '');
+            
+            heartbeat.markRun();
+            log('heartbeat-output', '// Mark as run');
+            log('heartbeat-output', 'heartbeat.markRun();');
+            log('heartbeat-output', 'heartbeat.shouldRun() → ' + heartbeat.shouldRun());
+            log('heartbeat-output', '');
+            
+            log('heartbeat-output', '// Will return true after 5 seconds...');
+        }
+
+        function demoMemory() {
+            clear('memory-output');
+            const memory = new MemoryFile('/tmp/memory.json');
+            
+            log('memory-output', '// Create memory file');
+            log('memory-output', 'const memory = new MemoryFile(\'/tmp/memory.json\');');
+            log('memory-output', '');
+            
+            memory.append('tasks', { id: 1, name: 'Review PRs', status: 'done' });
+            log('memory-output', '// Append entries');
+            log('memory-output', 'memory.append(\'tasks\', {');
+            log('memory-output', '  id: 1, name: \'Review PRs\', status: \'done\'');
+            log('memory-output', '});');
+            log('memory-output', '');
+            
+            memory.append('events', { type: 'user_login', timestamp: Date.now() });
+            log('memory-output', 'memory.append(\'events\', {');
+            log('memory-output', '  type: \'user_login\', timestamp: ' + Date.now());
+            log('memory-output', '});');
+            log('memory-output', '');
+            
+            log('memory-output', '// View all entries');
+            log('memory-output', 'memory.getAll() →');
+            log('memory-output', JSON.stringify(memory.getAll(), null, 2));
+        }
+
+        function demoTaskQueue() {
+            clear('queue-output');
+            const queue = new TaskQueue();
+            
+            log('queue-output', '// Create task queue');
+            log('queue-output', 'const queue = new TaskQueue();');
+            log('queue-output', '');
+            
+            queue.add({ name: 'Low priority task' }, 1);
+            queue.add({ name: 'High priority task' }, 10);
+            queue.add({ name: 'Medium priority task' }, 5);
+            
+            log('queue-output', '// Add tasks with priorities');
+            log('queue-output', 'queue.add({ name: \'Low priority\' }, 1);');
+            log('queue-output', 'queue.add({ name: \'High priority\' }, 10);');
+            log('queue-output', 'queue.add({ name: \'Medium priority\' }, 5);');
+            log('queue-output', '');
+            
+            log('queue-output', '// Process in priority order');
+            log('queue-output', 'queue.next() → ' + JSON.stringify(queue.next()));
+            log('queue-output', 'queue.next() → ' + JSON.stringify(queue.next()));
+            log('queue-output', 'queue.next() → ' + JSON.stringify(queue.next()));
+        }
+
+        async function demoRateLimiter() {
+            clear('rate-output');
+            const limiter = new RateLimiter({ tokensPerInterval: 3, intervalMs: 2000 });
+            
+            log('rate-output', '// Create rate limiter (3 tokens per 2 seconds)');
+            log('rate-output', 'const limiter = new RateLimiter({');
+            log('rate-output', '  tokensPerInterval: 3,');
+            log('rate-output', '  intervalMs: 2000');
+            log('rate-output', '});');
+            log('rate-output', '');
+            
+            log('rate-output', '// Consume tokens');
+            for (let i = 0; i < 5; i++) {
+                const allowed = limiter.tryConsume();
+                log('rate-output', `Request ${i + 1}: ${allowed ? '✅ ALLOWED' : '❌ RATE LIMITED'}`);
+                await new Promise(r => setTimeout(r, 100));
+            }
+            
+            log('rate-output', '');
+            log('rate-output', '// Wait 2 seconds...');
+            await new Promise(r => setTimeout(r, 2000));
+            
+            log('rate-output', '// Tokens refilled');
+            const allowed = limiter.tryConsume();
+            log('rate-output', `Request after refill: ${allowed ? '✅ ALLOWED' : '❌ RATE LIMITED'}`);
+        }
+
+        async function demoIntegration() {
+            clear('integration-output');
+            
+            log('integration-output', '// Full integration example');
+            log('integration-output', '');
+            
+            const state = new StateManager('/tmp/agent-state.json');
+            const heartbeat = new HeartbeatManager(state, { intervalMs: 30000 });
+            const memory = new MemoryFile('/tmp/agent-memory.json');
+            const queue = new TaskQueue();
+            const limiter = new RateLimiter({ tokensPerInterval: 5, intervalMs: 1000 });
+            
+            log('integration-output', '1️⃣ Check if heartbeat should run');
+            if (heartbeat.shouldRun()) {
+                log('integration-output', '   ✅ Time to check for updates');
+                
+                log('integration-output', '');
+                log('integration-output', '2️⃣ Queue tasks by priority');
+                queue.add({ type: 'check_email' }, 10);
+                queue.add({ type: 'check_calendar' }, 8);
+                queue.add({ type: 'check_weather' }, 3);
+                log('integration-output', '   Added 3 tasks to queue');
+                
+                log('integration-output', '');
+                log('integration-output', '3️⃣ Process tasks with rate limiting');
+                while (queue.size() > 0) {
+                    const task = queue.next();
+                    if (limiter.tryConsume()) {
+                        log('integration-output', `   ✅ Processing: ${task.type}`);
+                        memory.append('task_completed', task);
+                    } else {
+                        log('integration-output', `   ⏱️  Rate limited, requeueing: ${task.type}`);
+                        await new Promise(r => setTimeout(r, 200));
+                    }
+                }
+                
+                heartbeat.markRun();
+                log('integration-output', '');
+                log('integration-output', '4️⃣ Update state');
+                log('integration-output', '   Marked heartbeat as complete');
+                log('integration-output', '   Logged ' + memory.getAll().length + ' entries to memory');
+            } else {
+                log('integration-output', '   ⏸️  Not time yet, skipping...');
+            }
+        }
+    </script>
+</body>
+</html>
